@@ -40,4 +40,10 @@
   {:base base :power (+ power raise)})
 
 ;; any letter or number to the power of zero is 1 k^0 = 1
-  
+(defn format-power-zero [{base :base power :power :as original}]
+  (if (zero? power) 1 original))
+
+;; Equation: a^{-m} = frac{1}{a^m}
+(defn format-negative-indices [{base :base power :power :as original}]
+  (if (neg? power) {:numerator 1 :denominator base :power power} original ))
+
