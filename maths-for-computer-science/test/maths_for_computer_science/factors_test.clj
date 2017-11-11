@@ -1,6 +1,6 @@
 (ns maths-for-computer-science.factors-test
   (:require [clojure.test :refer :all]
-            [maths.factors :refer :all]))
+            [maths-for-computer-science.factors :refer :all]))
 
 (deftest is-factor-test
  (is (= true (is-factor? 8 24))))
