@@ -1,4 +1,4 @@
-(ns maths.factors)
+(ns maths-for-computer-science.factors)
 
 
 ;; https://www.bbc.co.uk/education/guides/zpvgdxs/revision

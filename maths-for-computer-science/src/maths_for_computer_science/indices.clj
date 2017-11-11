@@ -1,4 +1,4 @@
-(ns maths.indices)
+(ns maths-for-computer-science.indices)
 
 ;; a^1 = a
 
@@ -8,16 +8,14 @@
 (defn select-values [map ks]
   (reduce #(conj %1 (map %2)) [] ks))
 
-(defn select-matching-keys [coll {:keys [key]}]
-  (flatten (map #(select-values %1 [key]) coll)))
 
-(defn perform-operation-on-indices-with-matching-base [indices operation]
+(defn- perform-operation-on-indices-with-matching-base [indices operation]
   (merge 
    {:base (:base (first indices))}
    {:power (reduce operation (flatten (map #(select-values %1 [:power]) indices)))}))
 
 
-(defn indices-operation [indices operation]
+(defn- indices-operation [indices operation]
   (map #(perform-operation-on-indices-with-matching-base %1 operation ) (vals (group-by :base indices))))
 
 
@@ -45,5 +43,5 @@
 
 ;; Equation: a^{-m} = frac{1}{a^m}
 (defn format-negative-indices [{base :base power :power :as original}]
-  (if (neg? power) {:numerator 1 :denominator base :power power} original ))
+  (if (neg? power) {:numerator 1 :denominator base :power (unchecked-negate power)} original ))
 
