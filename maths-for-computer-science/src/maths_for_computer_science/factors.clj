@@ -79,6 +79,7 @@
 ;; So 30 is the lower common multiple
 
 (defn gcd [numerator denominator]
+  "Euclids algorithm using remainder m/n r and m = n and n = r recurse" 
   (if (= denominator 0)
       numerator
       (gcd denominator (rem numerator denominator ))))
