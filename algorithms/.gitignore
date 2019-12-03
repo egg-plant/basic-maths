@@ -1,0 +1,13 @@
+*.iml
+/.idea
+.DS_Store
+target/
+/target/
+/classes
+/checkouts
+*.jar
+*.class
+/.lein-*
+/.nrepl-port
+.hgignore
+.hg/
