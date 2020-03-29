@@ -10,6 +10,8 @@ class InsertionSortTest {
     void sort() {
         InsertionSort sort = new InsertionSort();
 
+        // calls (A,2) then recursive (A/4)
+
         var data = new int[]{5, 1, 2, 4, 3};
 
         sort.sort(data);
