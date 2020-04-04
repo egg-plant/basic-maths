@@ -23,16 +23,75 @@ public class DepthFirstSearchGraph {
                 System.out.println(popped.key);
                 foundKeys.add(popped.key);
                 visited.add(popped);
-            }
 
-            for (Node adjacent : popped.adjacentNodes) {
-                if (!visited.contains(adjacent)) {
-                    stack.addFirst(adjacent);
+                for (Node adjacent : popped.adjacentNodes) {
+                    if (!visited.contains(adjacent)) {
+                        // Add children the depth of the node onto stack
+                        stack.addFirst(adjacent);
+                    }
                 }
             }
 
+
         }
         return foundKeys;
+    }
+
+    int[] depthFirstSearch(int[][] adjacencyList, int source) {
+        if (adjacencyList == null || adjacencyList.length == 0) {
+            return new int[0];
+        }
+
+        int[] foundKeys = new int[adjacencyList.length];
+        boolean[] visited = new boolean[adjacencyList.length];
+        Deque<Integer> stack = new LinkedList<>();
+
+        stack.addFirst(source);
+
+        while (!stack.isEmpty()) {
+            int i = 0;
+            for (int elem : stack) {
+                System.out.println("Stack index " + i++ + " value " + elem);
+            }
+            Integer popped = stack.removeFirst();
+
+            // May already have been visited from another node adjacent nodes
+            if (!visited[popped]) {
+                System.out.println(popped);
+                foundKeys[popped] = popped;
+                visited[popped] = true;
+
+                for (int adjacentNodeIndex = 0; adjacentNodeIndex < adjacencyList[popped].length; adjacentNodeIndex++) {
+                    int adjacentNodeVertex = adjacencyList[popped][adjacentNodeIndex];
+                    if (!visited[adjacentNodeVertex]) {
+                        // Add children the depth of the node onto stack
+                        stack.addFirst(adjacentNodeVertex);
+                    }
+                }
+            }
+
+
+        }
+        return foundKeys;
+    }
+
+    void depthFirstSearchIterative(int[][] adjacencyList, int source) {
+        boolean visited[] = new boolean[adjacencyList.length];
+
+        dfsVisit(adjacencyList, source, visited);
+    }
+
+    void dfsVisit(int[][] adjacencyList, int v, boolean[] visited) {
+        // Mark the current node as visited and print it
+        visited[v] = true;
+        System.out.print(v + " ");
+
+        // Recur for all the vertices adjacent to this vertex
+        for (int adjacentNodeIndex = adjacencyList[v].length; adjacentNodeIndex < adjacencyList[v].length; adjacentNodeIndex++) {
+            int adjacentNodeVertex = adjacencyList[v][adjacentNodeIndex];
+            if (!visited[adjacentNodeVertex])
+                dfsVisit(adjacencyList, adjacentNodeVertex, visited);
+        }
     }
 
 }

@@ -34,4 +34,34 @@ public class BreadthFirstSearchGraph {
         return foundKeys;
     }
 
+    // where key data is the vertex index
+    int[] breadthFirstSearch(int[][] adjacencyList, int source) {
+        if (adjacencyList == null || adjacencyList.length == 0) {
+            return new int[0];
+        }
+
+        boolean[] visited = new boolean[adjacencyList.length];
+        int[] foundKeys = new int[adjacencyList.length];
+        Queue<Integer> queue = new LinkedList<>();
+        queue.add(source);
+
+        while (!queue.isEmpty()) {
+            int currentVertex = queue.remove();
+            foundKeys[currentVertex] = currentVertex;
+            System.out.println(currentVertex);
+            visited[currentVertex] = true;
+
+            // loop over adjacent nodes
+            for (int adjacentNode = 0; adjacentNode < adjacencyList[currentVertex].length; adjacentNode++) {
+                int adjacentNodeVertex = adjacencyList[currentVertex][adjacentNode];
+                if (!visited[adjacentNodeVertex]) {
+                    queue.add(adjacentNodeVertex);
+                }
+            }
+        }
+
+        return foundKeys;
+
+    }
+
 }
