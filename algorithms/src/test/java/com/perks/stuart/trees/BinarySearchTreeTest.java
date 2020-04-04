@@ -11,11 +11,9 @@ class BinarySearchTreeTest {
 
         BinarySearchTree binarySearchTree = new BinarySearchTree();
 
-        Node b = new Node();
-        b.key = 5;
+        BinaryNode b = new BinaryNode(5);
 
-        Node a = new Node();
-        a.key = 6;
+        BinaryNode a = new BinaryNode(6);
         a.left = b;
 
         binarySearchTree.inOrderTreeWalk(a);
@@ -27,14 +25,32 @@ class BinarySearchTreeTest {
 
         BinarySearchTree binarySearchTree = new BinarySearchTree();
 
-        Node b = new Node();
-        b.key = 5;
+        BinaryNode b = new BinaryNode(5);
 
-        Node a = new Node();
-        a.key = 6;
+        BinaryNode a = new BinaryNode(6);
         a.left = b;
 
         assertEquals(5, binarySearchTree.search(a, 5));
+
+    }
+
+    @Test
+    void maxHeightTree() {
+
+        BinarySearchTree binarySearchTree = new BinarySearchTree();
+
+        BinaryNode b = new BinaryNode(5);
+        BinaryNode c = new BinaryNode(5);
+        BinaryNode d = new BinaryNode(5);
+        BinaryNode e = new BinaryNode(5);
+
+        BinaryNode a = new BinaryNode(6);
+        a.left = b;
+        b.left = c;
+        c.left = d;
+        a.right = e;
+
+        assertEquals(3, binarySearchTree.maxDepth(a));
 
     }
 }

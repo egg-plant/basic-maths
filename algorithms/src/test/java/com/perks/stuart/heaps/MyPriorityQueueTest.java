@@ -4,13 +4,13 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-class PriorityQueueTest {
+class MyPriorityQueueTest {
 
     @Test
     void priorityQueueByKey() {
 
         // As backed by max heap highest key is most important
-        PriorityQueue queue = new PriorityQueue();
+        MyPriorityQueue queue = new MyPriorityQueue();
 
         queue.add(2);
 

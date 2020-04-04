@@ -1,8 +1,8 @@
 package com.perks.stuart.problem.solving;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import com.perks.stuart.trees.TrieTree;
+
+import java.util.*;
 
 public class StringAndArrayProblems {
 
@@ -112,6 +112,52 @@ public class StringAndArrayProblems {
     boolean areTheseAnagrams(String a, String b) {
         // null checks
         return true;
+    }
+
+    String balancedBrackets(String s) {
+        Deque<Character> stack = new LinkedList();
+        char[] data = s.toCharArray();
+
+        for (char startBracket : data) {
+            if ('{' == startBracket || '(' == startBracket || '[' == startBracket) {
+                stack.addFirst(startBracket);
+            } else {
+
+                if (stack.isEmpty()) {
+                    return "NO";
+                }
+                char top = stack.removeFirst();
+
+                if (!((startBracket == '}' && top == '{') || (startBracket == ')' && top == '(') || (startBracket == ']' && top == '['))) {
+                    return "NO";
+                }
+            }
+        }
+
+        if (!stack.isEmpty()) {
+            return "NO";
+        }
+
+        return "YES";
+    }
+
+    int[] contacts(String[][] queries) {
+        int[] results = new int[queries.length];
+        int findCounter = 0;
+
+        TrieTree trieTree = new TrieTree();
+
+        for (String[] query : queries) {
+            if (query[0].equals("add")) {
+                trieTree.insert(query[1]);
+            } else if ("find".equals(query[0])) {
+                results[findCounter] = trieTree.search(query[1]);
+                findCounter++;
+            }
+        }
+
+        return Arrays.copyOfRange(results, 0, findCounter);
+
     }
 
 

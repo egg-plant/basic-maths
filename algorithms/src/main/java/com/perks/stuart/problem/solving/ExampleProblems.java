@@ -45,5 +45,13 @@ class ExampleProblems {
         }
     }
 
+    // Get the two numbers (if any) in array those sum up to certain value.
+    //  Balanced brackets
+    // Set intersection (with different variation)
+
+//    Get number of disjoint sets (variations: number of islands in metrics, number of continents … either given matrix or graph).
+//    Find the first k frequent numbers in (large) array.
+//    Maximum sub-array
+
 
 }

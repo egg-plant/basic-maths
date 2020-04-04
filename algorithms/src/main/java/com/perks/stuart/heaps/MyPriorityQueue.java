@@ -2,13 +2,13 @@ package com.perks.stuart.heaps;
 
 // Example if using Max Heap as Priority Queue
 // takes O(log n) time to delete and insert into the heap
-public class PriorityQueue {
+public class MyPriorityQueue {
 
     private MaxHeap maxHeap;
     private int[] queue;
 
 
-    public PriorityQueue() {
+    public MyPriorityQueue() {
         this.maxHeap = new MaxHeap();
         this.queue = new int[0];
     }
