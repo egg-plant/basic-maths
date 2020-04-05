@@ -32,7 +32,7 @@ class BreadthFirstSearchGraphTest {
 
     @Test
     void breadthFirstSearchAdjacencyList() {
-        // node 0 points to 1 and 2. Node 1 points to 2 ... Node 3 points to itself 3
+        //node 0 points to 1 and 2. Node 1 points to 2 ... Node 3 points to itself 3
         int[][] adjacencyList = new int[][]{{1, 2}, {2}, {0, 3}, {3}};
 
         BreadthFirstSearchGraph bfs = new BreadthFirstSearchGraph();
@@ -40,5 +40,11 @@ class BreadthFirstSearchGraphTest {
                 0, 1, 2, 3
         }, bfs.breadthFirstSearch(adjacencyList, 2));
 
+
+        int[][] adjacencyList2 = new int[][]{{4}, {0, 6}, {0, 5, 6}, {}, {2, 6}, {1}, {4}, {6}};
+        bfs = new BreadthFirstSearchGraph();
+        assertArrayEquals(new int[]{
+                0, 1, 2, 0, 4, 5, 6, 0
+        }, bfs.breadthFirstSearch(adjacencyList2, 0));
     }
 }

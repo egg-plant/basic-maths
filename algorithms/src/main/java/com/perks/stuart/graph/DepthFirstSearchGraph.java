@@ -46,6 +46,7 @@ public class DepthFirstSearchGraph {
         boolean[] visited = new boolean[adjacencyList.length];
         Deque<Integer> stack = new LinkedList<>();
 
+        // Disconnected graph can check for any not visited in array and start them as source. If want to see all.
         stack.addFirst(source);
 
         while (!stack.isEmpty()) {

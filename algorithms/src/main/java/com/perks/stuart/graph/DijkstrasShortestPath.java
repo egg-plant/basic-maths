@@ -2,21 +2,14 @@ package com.perks.stuart.graph;
 
 import java.util.*;
 
-public class DikstrasShortestPath {
+public class DijkstrasShortestPath {
 
     //stores parent of every vertex in shortest distance
     private Queue<DistanceNode> q;
-    private Map<Integer, Integer> cost = new HashMap<>();
-
+    // Holds the shortest total distance of getting to node (key) from source
+    private Map<Integer, Integer> distance = new HashMap<>();
     // holds Node and its parent.
     private Map<Integer, Integer> parent = new HashMap<>();
-
-
-    //  search()
-    public DikstrasShortestPath(int V) {
-    }
-
-    // Map of keys (could be array) which holds a map of connected keys and weights
 
     // initialize all to parent null and distance MAX value except source node which is distance 0
     // as starting point
@@ -25,21 +18,25 @@ public class DikstrasShortestPath {
         for (int i = 0; i < adjacencyMatrix.length; i++) {
             if (i != source) {
                 q.add(new DistanceNode(i, Integer.MAX_VALUE));
-                cost.put(i, Integer.MAX_VALUE);
+                distance.put(i, Integer.MAX_VALUE);
             } else {
                 // set the starting node so 0
                 q.add(new DistanceNode(i, 0));
+                distance.put(i, 0);
             }
         }
     }
 
-    public Set<Integer> search(int source, int[][] adjacencyMatrix) {
+    public Set<Integer> search(int source, int targetNode, int[][] adjacencyMatrix) {
         // is the vertices key by distance value
         q = new PriorityQueue<>(new DistanceNodeComparator());
         // Initialize the Q with all infinity values
         initializeSingleSource(adjacencyMatrix, source);
         Set<Integer> s = new HashSet<>();
 
+        // TODO this works with either priority queue is empty or this
+        // Ideally S just contains the shortest path.
+        // could also be s.size() != adjacencyMatrix.length
         while (!q.isEmpty()) {
             DistanceNode u = q.poll(); // take smallest weight from Q
             s.add(u.key); // could add whole node here
@@ -48,7 +45,7 @@ public class DikstrasShortestPath {
                 int weight = adjacencyMatrix[u.key][i];
                 if (weight != -1) {
                     // TODO could optimise and store the distance node in the cost
-                    DistanceNode iInQueue = new DistanceNode(i, cost.get(i));
+                    DistanceNode iInQueue = new DistanceNode(i, distance.get(i));
 
                     // non links are set to -1
                     // add distance of current adjVertex to edge weight to get distance of adjacent adjVertex from source adjVertex
@@ -60,7 +57,7 @@ public class DikstrasShortestPath {
 
         }
 
-        int node = adjacencyMatrix.length - 1;
+        int node = targetNode;
         Set<Integer> shortestPath = new HashSet<>();
         while (node != source) {
             int nodeParent = parent.get(node);
@@ -69,7 +66,7 @@ public class DikstrasShortestPath {
         }
         shortestPath.add(source);
 
-        System.out.println("Shortest path cost is " + cost.get(adjacencyMatrix.length - 1));
+        System.out.println("Shortest path cost is " + distance.get(targetNode - 1));
         System.out.println("Shortest path is " + Arrays.toString(shortestPath.toArray()));
 
         return shortestPath;
@@ -81,10 +78,9 @@ public class DikstrasShortestPath {
             DistanceNode vNode = new DistanceNode();
             vNode.key = v.key;
             vNode.distance = newDistance;
-            vNode.parent = u; // update the parent
             q.add(vNode);
             parent.put(v.key, u.key);
-            cost.put(v.key, newDistance);
+            distance.put(v.key, newDistance);
             System.out.println("v " + v.key + " u" + u.key + " v.distance " + v.distance + " new distance " + newDistance);
         } else {
             System.out.println("Ignored v " + v.key + " u" + u.key + " v.distance " + v.distance + " new distance " + newDistance);
@@ -100,7 +96,6 @@ public class DikstrasShortestPath {
     }
 
     static class DistanceNode {
-        DistanceNode parent = null;
         int distance;
         int key;
 

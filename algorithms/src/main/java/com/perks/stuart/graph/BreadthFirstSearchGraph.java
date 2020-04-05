@@ -43,6 +43,8 @@ public class BreadthFirstSearchGraph {
         boolean[] visited = new boolean[adjacencyList.length];
         int[] foundKeys = new int[adjacencyList.length];
         Queue<Integer> queue = new LinkedList<>();
+
+        // if disconnected graph can check BFS for each unvisited node. in loop here.
         queue.add(source);
 
         while (!queue.isEmpty()) {

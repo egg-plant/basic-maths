@@ -43,5 +43,11 @@ class DepthFirstSearchGraphTest {
         // iterative approach
         //  dfs.depthFirstSearchIterative(adjacencyList, 2);
 
+        int[][] adjacencyList2 = new int[][]{{3}, {5, 6}, {4, 5, 6}, {0, 5, 7}, {2, 6}, {1, 2, 3, 7}, {1, 2, 4, 7}, {3, 5, 6}};
+        dfs = new DepthFirstSearchGraph();
+        assertArrayEquals(new int[]{
+                0, 1, 2, 3, 4, 5, 6, 7
+        }, dfs.depthFirstSearch(adjacencyList2, 0));
+
     }
 }
