@@ -6,6 +6,7 @@ public class DijkstrasShortestPath {
 
     //stores parent of every vertex in shortest distance
     private Queue<DistanceNode> q;
+    // TODO these could be simple arrays to be more performant
     // Holds the shortest total distance of getting to node (key) from source
     private Map<Integer, Integer> distance = new HashMap<>();
     // holds Node and its parent.
@@ -14,7 +15,6 @@ public class DijkstrasShortestPath {
     // initialize all to parent null and distance MAX value except source node which is distance 0
     // as starting point
     private void initializeSingleSource(int[][] adjacencyMatrix, int source) {
-
         for (int i = 0; i < adjacencyMatrix.length; i++) {
             if (i != source) {
                 q.add(new DistanceNode(i, Integer.MAX_VALUE));
@@ -34,29 +34,30 @@ public class DijkstrasShortestPath {
         initializeSingleSource(adjacencyMatrix, source);
         Set<Integer> s = new HashSet<>();
 
-        // TODO this works with either priority queue is empty or this
-        // Ideally S just contains the shortest path.
-        // could also be s.size() != adjacencyMatrix.length
+        // this works with either priority queue is empty or this
+        // s.size() != adjacencyMatrix.length
         while (!q.isEmpty()) {
             DistanceNode u = q.poll(); // take smallest weight from Q
             s.add(u.key); // could add whole node here
             for (int i = 0; i < adjacencyMatrix[u.key].length; i++) {
 
                 int weight = adjacencyMatrix[u.key][i];
+                // non links are set to -1
                 if (weight != -1) {
-                    // TODO could optimise and store the distance node in the cost
+                    // Alternate could optimise and store the distance node in the distance
                     DistanceNode iInQueue = new DistanceNode(i, distance.get(i));
-
-                    // non links are set to -1
                     // add distance of current adjVertex to edge weight to get distance of adjacent adjVertex from source adjVertex
                     // when it goes through current adjVertex
                     int newDistance = u.distance + weight;
                     relax(u, iInQueue, newDistance);
                 }
             }
-
         }
 
+        return getShortestPath(source, targetNode);
+    }
+
+    private Set<Integer> getShortestPath(int source, int targetNode) {
         int node = targetNode;
         Set<Integer> shortestPath = new HashSet<>();
         while (node != source) {
@@ -68,18 +69,18 @@ public class DijkstrasShortestPath {
 
         System.out.println("Shortest path cost is " + distance.get(targetNode - 1));
         System.out.println("Shortest path is " + Arrays.toString(shortestPath.toArray()));
-
         return shortestPath;
     }
 
     private void relax(DistanceNode u, DistanceNode v, int newDistance) {
         if (v.distance > newDistance) {
+            // Reduce key in PriorityQueue by removing it and adding it with new distance weight.
             q.remove(v);
-            DistanceNode vNode = new DistanceNode();
-            vNode.key = v.key;
-            vNode.distance = newDistance;
+            DistanceNode vNode = new DistanceNode(v.key, newDistance);
             q.add(vNode);
+            // Update parents to know path
             parent.put(v.key, u.key);
+            // Add distance to know distances from source to each node.
             distance.put(v.key, newDistance);
             System.out.println("v " + v.key + " u" + u.key + " v.distance " + v.distance + " new distance " + newDistance);
         } else {

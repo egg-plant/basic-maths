@@ -11,3 +11,4 @@ target/
 /.nrepl-port
 .hgignore
 .hg/
+/venv/

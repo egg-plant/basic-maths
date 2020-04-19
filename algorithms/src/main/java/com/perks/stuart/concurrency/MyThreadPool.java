@@ -1,18 +1,20 @@
 package com.perks.stuart.concurrency;
 
-import java.util.Queue;
-import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 public class MyThreadPool {
 
     // Holds the tasks to execute
-    private Queue<Runnable> workerQueue = new ConcurrentLinkedQueue<>();
-    private final int numberOfThreads;
+    private BlockingQueue<Runnable> workerQueue = new ArrayBlockingQueue(10);
     private final PoolWorker[] pool;
+    private volatile boolean isThreadPoolRunning;
 
     public MyThreadPool(int numberOfThreads) {
-        this.numberOfThreads = numberOfThreads;
         this.pool = new PoolWorker[numberOfThreads];
+
+        this.isThreadPoolRunning = true;
 
         for (int i = 0; i < numberOfThreads; i++) {
             pool[i] = new PoolWorker();
@@ -21,10 +23,8 @@ public class MyThreadPool {
     }
 
     public void execute(Runnable task) {
-        synchronized (workerQueue) {
-            workerQueue.add(task);
-            workerQueue.notify();
-        }
+        workerQueue.add(task);
+        // if not using a blocking queue can notify here as they are waiting to wake up runnables
     }
 
 
@@ -32,22 +32,29 @@ public class MyThreadPool {
 
         @Override
         public void run() {
-            Runnable task = null;
+            Runnable task;
+            // Shutdown all threads
+            while (isThreadPoolRunning) {
+                try {
 
-            // think about shutting down.
-            while (true) {
-                synchronized (workerQueue) {
-                    while (workerQueue.isEmpty()) {
-                        try {
-                            workerQueue.wait();
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
+                    // If this is not possible to use then notify wait
+                    task = workerQueue.poll(100, TimeUnit.MILLISECONDS);
+
+                    if (task instanceof Task) {
+                        task.run();
+                    } else if (task instanceof Finish) {
+                        // or you interrupt is alternate
+                        task.run();
+                        isThreadPoolRunning = false;
                     }
-                    task = workerQueue.poll();
+
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
-                task.run();
+
+
             }
+
         }
     }
 
@@ -64,14 +71,25 @@ public class MyThreadPool {
         }
     }
 
+    public static class Finish implements Runnable {
 
-    public static void main(String[] args) {
+        public void run() {
+            System.out.println("Task is shutting down.");
+        }
+    }
+
+
+    public static void main(String[] args) throws InterruptedException {
         MyThreadPool pool = new MyThreadPool(7);
 
         for (int i = 0; i < 5; i++) {
             Task task = new Task(i);
             pool.execute(task);
         }
+
+        Thread.sleep(1000);
+        pool.execute(new Finish());
+
     }
 }
 
